@@ -9,40 +9,69 @@ namespace ThesisMethod.Droid
     public class NLogLogger : ILogger
     {
         private Logger log;
-        
+  
         public NLogLogger(Logger log)
         {
             this.log = log;
         }
 
-        public void Debug(string text, params object[] args)
+        public void InfoApp(Enum e, params object[] args)
         {
-            log.Debug(text, args);
+           
+            
+            Console.WriteLine("args length " + args.Length);
+            if (args.Length != 0)
+            {
+                foreach (object arg in args)
+                {
+                    string text = e.ToString() + "-" + arg;
+                    
+                    log.Info(text);
+                }
+            }
+            else
+            {
+                Console.WriteLine("e value " + e.ToString());
+                log.Info(e.ToString());
+            }
+           
         }
 
-        public void Error(string text, params object[] args)
+        public void InfoDevice(Enum e, params object[] args)
         {
-            log.Error(text, args);
+            foreach (object arg in args)
+            {
+                string text = e.ToString() + "-" + arg;
+                log.Info(text);
+            }
         }
 
-        public void Fatal(string text, params object[] args)
+        public void InfoNavigational(Enum e, params object[] args)
         {
-            log.Fatal(text, args);
+            foreach (object arg in args)
+            {
+                string text = e.ToString() + "-" + arg;
+                log.Info(text);
+            }
         }
 
-        public void Info(string text, params object[] args)
+        public void InfoTouch(Enum e, params object[] args)
         {
-            log.Info(text, args);
+            foreach (object arg in args)
+            {
+                string text = e.ToString() + "-" + arg;
+                log.Info(text);
+            }
         }
-
-        public void Trace(string text, params object[] args)
+        
+        public void InfoCrash(Enum e, params object[] args)
         {
-            log.Trace(text, args);
-        }
-
-        public void Warn(string text, params object[] args)
-        {
-            log.Warn(text, args);
+           
+            foreach (object arg in args)
+            {
+                string text = e.ToString() + "-" + arg;
+                log.Error(text);
+            }
         }
     }
 }

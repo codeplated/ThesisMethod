@@ -1,4 +1,6 @@
-﻿using ThesisMethod.Views;
+﻿
+using System;
+using ThesisMethod.Views;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -13,16 +15,29 @@ namespace ThesisMethod
         public App()
         {
             InitializeComponent();
-            logger.Info("App Start", "navigational");
+            logger.InfoApp(InfoApp.appIntializing);
+            //logger.InfoNavigational(InfoNavigational.pageName, "Test page name");
+            
+            
             SetMainPage();
         }
         protected override void OnStart()
         {
-            // Handle when your app starts
-            logger.Fatal("app started" , "informations", "not happeing");
-            DependencyService.Get<ILogManager>().HttpUploadFile();
+            logger.InfoApp(InfoApp.appForeground);
+            DependencyService.Get<ILogManager>().checkFileSizeAndUpload();
+            base.OnStart();
         }
-
+        protected override void OnResume()
+        {
+            logger.InfoApp(InfoApp.appForeground);
+            DependencyService.Get<ILogManager>().checkFileSizeAndUpload();
+            base.OnResume();
+        }
+        protected override void OnSleep()
+        {
+            logger.InfoApp(InfoApp.appBackground);
+            base.OnSleep();
+        }
         public static void SetMainPage()
         {
             Current.MainPage = new TabbedPage

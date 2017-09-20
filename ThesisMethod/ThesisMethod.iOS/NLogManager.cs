@@ -1,13 +1,12 @@
 ﻿using System;
 using System.IO;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
-using Foundation;
 using ThesisMethod.iOS;
 using Xamarin.Forms;
 using System.Net;
 using System.Diagnostics;
+using NLog.Config;
+using NLog.Targets;
+using NLog;
 
 [assembly: Dependency(typeof(NLogManager))]
 namespace ThesisMethod.iOS
@@ -33,10 +32,6 @@ namespace ThesisMethod.iOS
             config.LoggingRules.Add(fileRule);
 
             LogManager.Configuration = config;
-            var rootAppender = LogManager.Repo
-                                  .GetAppenders()
-                                  .OfType<FileAppender>()
-                                  .FirstOrDefault(fa => fa.Name == name);
         }
 
         public ILogger GetLog([System.Runtime.CompilerServices.CallerFilePath] string callerFilePath = "")

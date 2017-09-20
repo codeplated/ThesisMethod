@@ -1,5 +1,4 @@
-﻿using System;
-using NLog;
+﻿using NLog;
 using ThesisMethod.iOS;
 using Xamarin.Forms;
 
@@ -9,7 +8,7 @@ namespace ThesisMethod.iOS
     public class NLogLogger : ILogger
     {
         private Logger log;
-        
+
         public NLogLogger(Logger log)
         {
             this.log = log;
