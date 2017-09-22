@@ -18,8 +18,6 @@ namespace ThesisMethod.Droid
         public void InfoApp(Enum e, params object[] args)
         {
            
-            
-            Console.WriteLine("args length " + args.Length);
             if (args.Length != 0)
             {
                 foreach (object arg in args)
@@ -31,7 +29,7 @@ namespace ThesisMethod.Droid
             }
             else
             {
-                Console.WriteLine("e value " + e.ToString());
+                
                 log.Info(e.ToString());
             }
            
@@ -72,6 +70,11 @@ namespace ThesisMethod.Droid
                 string text = e.ToString() + "-" + arg;
                 log.Error(text);
             }
+        }
+
+        public void InfoFrameworkCrash(string message, params object[] args)
+        {
+            log.Fatal("InfoFrameworkCrash-"+message);
         }
     }
 }

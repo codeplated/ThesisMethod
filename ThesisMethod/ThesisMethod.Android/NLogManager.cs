@@ -18,8 +18,16 @@ namespace ThesisMethod.Droid
  
     public class NLogManager : ILogManager
     {
+        private ILogger logger;
+        private static string TAG = "------------NlogManager.cs ";
+        private static string deviceId = CrossDevice.Hardware.DeviceId;
+        private static string logFileName = "SplitLogFileTxt-";
+        private static string logFileExt= ".txt";
+        private static long maxFileSize = 1000;
+
         public NLogManager()
         {
+            Console.WriteLine(TAG + "constructor");
             var config = new LoggingConfiguration();
 
             var consoleTarget = new ConsoleTarget();
@@ -33,17 +41,21 @@ namespace ThesisMethod.Droid
             string folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             fileTarget.Layout = @" ${message} ${longdate} ";
             //${callsite} ${callsite} ${counter}
-            Console.WriteLine("creating fucking new file");
-            fileTarget.FileName = Path.Combine(InfoDevice.deviceUniqueId.ToString(), @"${longdate}", "-LogFile.txt");
+            Console.WriteLine(TAG+" check device id = "+ deviceId);
+            fileTarget.FileName = Path.Combine(folder, logFileName+deviceId+logFileExt);
+            Console.WriteLine(TAG + " check file name = " + fileTarget.FileName);
+            //fileTarget.FileName = Path.Combine(InfoDevice.deviceUniqueId.ToString(), @"${longdate}", "-LogFile.txt");
             config.AddTarget("file", fileTarget);
 
             var fileRule = new LoggingRule("*", LogLevel.Info, fileTarget);
             config.LoggingRules.Add(fileRule);
             LogManager.Configuration = config;
+            logger = GetLog();
         }
 
         public ILogger GetLog([System.Runtime.CompilerServices.CallerFilePath] string callerFilePath = "")
         {
+            Console.WriteLine(TAG + "getLog called");
             string fileName = callerFilePath;
 
             if (fileName.Contains("/"))
@@ -57,7 +69,9 @@ namespace ThesisMethod.Droid
 
         public void deleteLogFile()
         {
-            string fileDirectory = @"/data/user/0/com.companyname.ThesisMethod/files";
+            Console.WriteLine(TAG + "DeleteLogFileCalled");
+            //string fileDirectory = @"/data/user/0/com.companyname.ThesisMethod/files";
+            string fileDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             int counter = 0;
             try
             {
@@ -69,49 +83,66 @@ namespace ThesisMethod.Droid
                     counter++;
                     File.Delete(f);
                 }
-                Debug.WriteLine(counter + " Log file(s) deleted successfully!");
+                Console.WriteLine(TAG + "DeleteLogFile" + counter + " Log file(s) deleted successfully!");
                 counter = 0;
             }
             catch (DirectoryNotFoundException dirNotFound)
             {
-                Console.WriteLine(dirNotFound.Message);
+                Console.WriteLine(TAG + "DeleteLogFileCalled message = " + dirNotFound.Message);
+                logger.InfoFrameworkCrash("deleteLogFile-dirNotFound.Message");
             }
         }
-        public void fileHeader()
+        public void fileHeader() 
         {
-            ILogger logger = DependencyService.Get<ILogManager>().GetLog();
+            Console.WriteLine(TAG + "file header called");
             logger.InfoDevice(InfoDevice.deviceUniqueId, CrossDevice.Hardware.DeviceId);
             logger.InfoDevice(InfoDevice.screenDimensions, CrossDevice.Hardware.ScreenHeight +"*"+ CrossDevice.Hardware.ScreenWidth);
             logger.InfoDevice(InfoDevice.manufacturerAndModel, CrossDevice.Hardware.Manufacturer + "," + CrossDevice.Hardware.Model);
-            logger.InfoDevice(InfoDevice.operatingSystenAndVersion, CrossDevice.Hardware.OperatingSystem + "," + CrossDevice.Hardware.OperatingSystemVersion);
+            logger.InfoDevice(InfoDevice.operatingSystemAndVersion, CrossDevice.Hardware.OperatingSystem + "," + CrossDevice.Hardware.OperatingSystemVersion);
             logger.InfoApp(InfoApp.appVersion, CrossDevice.App.Version);
             logger.InfoApp(InfoApp.appUniqueId, CrossDevice.Hardware.DeviceId);
         }
         public void checkFileSizeAndUpload()
         {
-            string file = @"/data/user/0/com.companyname.ThesisMethod/files/Log.txt";
-            long size = new System.IO.FileInfo(file).Length;
-            long maxSize = 500;
-            Debug.WriteLine("file size" + size);
-            if (size>maxSize)
+     
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), logFileName.ToString() + deviceId.ToString() + logFileExt.ToString());
+            Console.WriteLine(TAG + "checkFileSizeAndUpload Called");
+            Console.WriteLine(TAG + "file name = "+ file);
+            if (File.Exists(file))
             {
-                fileHeader();
-                HttpUploadFile();
+                long size = new System.IO.FileInfo(file).Length;
+                Console.WriteLine(TAG + "file size" + size);
+                Console.WriteLine(TAG + "I should be reading it");
+                if (size > maxFileSize)
+                {
+                    fileHeader();
+                    HttpUploadFile();
+                }
+                else
+                {
+                    Console.WriteLine(TAG + "file size(" + size + ") is not big enough to upload ");
+                }
             }else
             {
-                Debug.WriteLine("file size("+ size +") is not big enough to upload ");
+                Console.WriteLine(TAG + "checkFileSizeAndUpload - Log file not found");
+                logger.InfoFrameworkCrash("checkFileSizeAndUpload-Log file not found");
+
             }
+             
 
         }
         public async void HttpUploadFile()
         {
-            string file = @"/data/user/0/com.companyname.ThesisMethod/files/Log.txt";
+            Console.WriteLine(TAG + "httpUploadFile called");
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), logFileName.ToString() + deviceId.ToString() + logFileExt.ToString());
             if (File.Exists(file))
             {
                 string url = "http://codeplated.pythonanywhere.com/uploadFile";
                 string paramName = "file";
                 string contentType = "text/plain";
-                //Debug.WriteLine(string.Format("Uploading {0} to {1}", file, url));
+                Console.WriteLine(TAG + string.Format("Uploading {0} to {1}", file, url));
                 string boundary = "---------------------------" + DateTime.Now.Ticks.ToString("x");
                 byte[] boundarybytes = System.Text.Encoding.ASCII.GetBytes("\r\n--" + boundary + "\r\n");
                 HttpWebRequest wr = (HttpWebRequest)WebRequest.Create(url);
@@ -122,6 +153,7 @@ namespace ThesisMethod.Droid
 
                 Stream rs = wr.GetRequestStream();
                 rs.Write(boundarybytes, 0, boundarybytes.Length);
+                
                 string headerTemplate = "Content-Disposition: form-data; name=\"{0}\"; filename=\"{1}\"\r\nContent-Type: {2}\r\n\r\n";
                 string header = string.Format(headerTemplate, paramName, file, contentType);
                 byte[] headerbytes = System.Text.Encoding.UTF8.GetBytes(header);
@@ -147,13 +179,14 @@ namespace ThesisMethod.Droid
                     wresp = (HttpWebResponse)await wr.GetResponseAsync();
                     Stream stream2 =wresp.GetResponseStream();
                     StreamReader reader2 = new StreamReader(stream2);
-                    Debug.WriteLine(string.Format("File uploaded successfully, server response is: " + reader2.ReadToEnd()) + wresp.StatusCode);
-                    Debug.WriteLine("Deleting uploaded log file now!");
+                    Console.WriteLine(TAG + string.Format("File uploaded successfully, server response is: " + reader2.ReadToEnd()) + wresp.StatusCode);
+                    Console.WriteLine(TAG + "Deleting uploaded log file now!");
                     deleteLogFile();
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("Error uploading file" + ex);
+                    Console.WriteLine(TAG + "Error uploading file" + ex);
+                    logger.InfoFrameworkCrash("HttpUploadFile-Error uploading file");
                     if (wresp != null)
                     {
                         wresp.Close();
@@ -166,7 +199,8 @@ namespace ThesisMethod.Droid
                 }
             }else
             {
-                Debug.WriteLine("Log files do not exist!");
+                Console.WriteLine(TAG + "Log files do not exist!");
+                logger.InfoFrameworkCrash("HttpUploadFile-Log file not found");
             }
         }
     }

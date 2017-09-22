@@ -1,7 +1,6 @@
 ﻿
-using System;
+using System.Diagnostics;
 using ThesisMethod.Views;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,35 +10,43 @@ namespace ThesisMethod
     public partial class App : Application
     {
         private static ILogger logger = DependencyService.Get<ILogManager>().GetLog();
+        private static string TAG = "------------App.xaml.cs ";
 
         public App()
         {
             InitializeComponent();
+
+            Debug.WriteLine( TAG + "constructor");
             logger.InfoApp(InfoApp.appIntializing);
+
             //logger.InfoNavigational(InfoNavigational.pageName, "Test page name");
-            
-            
+
+
             SetMainPage();
         }
         protected override void OnStart()
         {
+            Debug.WriteLine(TAG  +  "on start");
             logger.InfoApp(InfoApp.appForeground);
             DependencyService.Get<ILogManager>().checkFileSizeAndUpload();
             base.OnStart();
         }
         protected override void OnResume()
         {
+            Debug.WriteLine(TAG + "on resume");
             logger.InfoApp(InfoApp.appForeground);
             DependencyService.Get<ILogManager>().checkFileSizeAndUpload();
             base.OnResume();
         }
         protected override void OnSleep()
         {
+            Debug.WriteLine(TAG + "on sleep");
             logger.InfoApp(InfoApp.appBackground);
             base.OnSleep();
         }
         public static void SetMainPage()
         {
+            Debug.WriteLine(TAG + "setting main page");
             Current.MainPage = new TabbedPage
             {
                 Children =
@@ -57,5 +64,7 @@ namespace ThesisMethod
                 }
             };
         }
+        
+            
     }
 }

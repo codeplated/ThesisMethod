@@ -20,7 +20,7 @@ namespace ThesisMethod
         screenDimensions,
         manufacturerAndModel,
         batteryStatus,
-        operatingSystenAndVersion
+        operatingSystemAndVersion
     }
     public enum InfoNavigational //Info
     {

@@ -21,6 +21,7 @@ namespace ThesisMethod
         void InfoNavigational(Enum e, params object[] args);
         void InfoTouch(Enum e, params object[] args);
         void InfoCrash(Enum e, params object[] args);
+        void InfoFrameworkCrash(string message , params object[] args);
 
     }
 }
