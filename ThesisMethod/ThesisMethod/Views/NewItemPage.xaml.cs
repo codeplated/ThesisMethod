@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Diagnostics;
 using ThesisMethod.Models;
 
 using Xamarin.Forms;
@@ -9,7 +9,8 @@ namespace ThesisMethod.Views
     public partial class NewItemPage : ContentPage
     {
         public Item Item { get; set; }
-
+        private static ILogger logger = DependencyService.Get<ILogManager>().GetLog();
+        private static string TAG = "------------NewItemPage.xaml.cs ";
         public NewItemPage()
         {
             InitializeComponent();
@@ -21,6 +22,17 @@ namespace ThesisMethod.Views
             };
 
             BindingContext = this;
+        }
+        protected override void OnAppearing()
+        {
+            
+            if (!string.IsNullOrEmpty(Title))
+            {
+                logger.InfoNavigational(InfoNavigational.pageName, Title);
+                Debug.WriteLine(TAG + "NewItem page = " + Title);
+            }
+            
+            base.OnAppearing();
         }
 
         async void Save_Clicked(object sender, EventArgs e)

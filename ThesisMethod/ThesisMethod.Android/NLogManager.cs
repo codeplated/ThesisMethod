@@ -23,7 +23,7 @@ namespace ThesisMethod.Droid
         private static string deviceId = CrossDevice.Hardware.DeviceId;
         private static string logFileName = "SplitLogFileTxt-";
         private static string logFileExt= ".txt";
-        private static long maxFileSize = 1000;
+        private static long maxFileSize = 5000;
 
         public NLogManager()
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace ThesisMethod.Helpers
@@ -8,8 +9,11 @@ namespace ThesisMethod.Helpers
     /// <summary>
     /// Observable object with INotifyPropertyChanged implemented
     /// </summary>
+    /// 
+    
     public class ObservableObject : INotifyPropertyChanged
     {
+        private static string TAG = "------------ObserableObject.cs ";
         /// <summary>
         /// Sets the property.
         /// </summary>
@@ -44,6 +48,7 @@ namespace ThesisMethod.Helpers
         /// <param name="propertyName">Property name.</param>
         protected void OnPropertyChanged([CallerMemberName]string propertyName = "")
         {
+            Debug.WriteLine(TAG + " OnPropertyChanged Called" + propertyName);
             var changed = PropertyChanged;
             if (changed == null)
                 return;

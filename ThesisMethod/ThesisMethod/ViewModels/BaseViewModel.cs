@@ -1,4 +1,5 @@
-﻿using ThesisMethod.Helpers;
+﻿using System.Diagnostics;
+using ThesisMethod.Helpers;
 using ThesisMethod.Models;
 using ThesisMethod.Services;
 
@@ -12,12 +13,29 @@ namespace ThesisMethod.ViewModels
         /// Get the azure service instance
         /// </summary>
         public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
-
+        public static ILogger logger = DependencyService.Get<ILogManager>().GetLog();
+        private static string TAG = "------------BaseViewModel.cs ";
         bool isBusy = false;
         public bool IsBusy
         {
             get { return isBusy; }
             set { SetProperty(ref isBusy, value); }
+        }
+        public Command<Point> CanvasTappedCommand { get { return new Command<Point>((p) => OnCanvasTapped(p)); } }
+        public void OnCanvasTapped(Point p)
+        {
+            // your event handling logic
+            Debug.WriteLine(TAG + " X, Y value = " + p.X + " , " + p.Y);
+            if (!p.IsEmpty)
+            {
+                logger.InfoTouch(InfoTouch.cordinateX, p.X);
+                logger.InfoTouch(InfoTouch.cordinateY, p.Y);
+            }
+            else
+            {
+                Debug.WriteLine(TAG + "p is empty");
+            }
+
         }
         /// <summary>
         /// Private backing field to hold the title
@@ -31,6 +49,7 @@ namespace ThesisMethod.ViewModels
             get { return title; }
             set { SetProperty(ref title, value); }
         }
+        
     }
 }
 

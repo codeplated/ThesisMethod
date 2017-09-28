@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Diagnostics;
 using ThesisMethod.Models;
 using ThesisMethod.ViewModels;
 
@@ -10,14 +10,15 @@ namespace ThesisMethod.Views
     public partial class ItemsPage : ContentPage
     {
         ItemsViewModel viewModel;
-
+        private static string TAG = "------------ItemsPage.xaml.cs ";
+        private static ILogger logger = DependencyService.Get<ILogManager>().GetLog();
         public ItemsPage()
         {
             InitializeComponent();
 
             BindingContext = viewModel = new ItemsViewModel();
         }
-
+       
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
             var item = args.SelectedItem as Item;
@@ -38,7 +39,12 @@ namespace ThesisMethod.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
+            
+            if (!string.IsNullOrEmpty(Title))
+            {
+                logger.InfoNavigational(InfoNavigational.pageName, Title);
+                Debug.WriteLine(TAG + "Items page = " + Title);
+            }
             if (viewModel.Items.Count == 0)
                 viewModel.LoadItemsCommand.Execute(null);
         }

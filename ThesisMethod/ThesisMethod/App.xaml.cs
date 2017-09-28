@@ -38,11 +38,20 @@ namespace ThesisMethod
             DependencyService.Get<ILogManager>().checkFileSizeAndUpload();
             base.OnResume();
         }
+        
         protected override void OnSleep()
         {
             Debug.WriteLine(TAG + "on sleep");
             logger.InfoApp(InfoApp.appBackground);
             base.OnSleep();
+        }
+        public Xamarin.Forms.Command<Point> CanvasTappedCommand { get { return new Xamarin.Forms.Command<Point>((p) => OnCanvasTapped(p)); } }
+        public void OnCanvasTapped(Point p)
+        {
+            // your event handling logic
+            Debug.WriteLine(p.X);
+            Debug.WriteLine("Bismillah");
+
         }
         public static void SetMainPage()
         {

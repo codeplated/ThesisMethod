@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:g="clr-namespace:ThesisMethod.Gestures; assembly=ThesisMethod"
              x:Class="ThesisMethod.Views.ItemsPage"
-              Title="{Binding Title}"
+             Title="{Binding Title}"
              x:Name="BrowseItemsPage">
   <ContentPage.ToolbarItems>
-  	<ToolbarItem Text="Add Item" Clicked="AddItem_Clicked" />
+        <ToolbarItem Text="Add Item" Clicked="AddItem_Clicked" />
   </ContentPage.ToolbarItems>
   <ContentPage.Content>
-    <StackLayout>
+    <StackLayout g:Gesture.Tapped="{Binding CanvasTappedCommand}">
       <ListView x:Name="ItemsListView"
 				ItemsSource="{Binding Items}"
                 VerticalOptions="FillAndExpand"

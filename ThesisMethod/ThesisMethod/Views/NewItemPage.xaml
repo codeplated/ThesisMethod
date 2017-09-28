@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="ThesisMethod.Views.NewItemPage"
+<ContentPage xmlns:g="clr-namespace:ThesisMethod.Gestures; assembly=ThesisMethod"
+             xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ThesisMethod.Views.NewItemPage"
 		Title="New Item">
-	<ContentPage.ToolbarItems>
+    <ContentPage.ToolbarItems g:Gesture.Tapped="{Binding CanvasTappedCommand}">
 		<ToolbarItem Text="Save" Clicked="Save_Clicked" />
 	</ContentPage.ToolbarItems>
-	<ContentPage.Content>
-		<StackLayout Spacing="20" Padding="15">
+    <ContentPage.Content g:Gesture.Tapped="{Binding CanvasTappedCommand}">
+        <StackLayout Spacing="20" Padding="15" >
 			<Label Text="Text" FontSize="Medium" />
 			<Entry Text="{Binding Item.Text}" FontSize="Small" />
 			<Label Text="Description" FontSize="Medium" />

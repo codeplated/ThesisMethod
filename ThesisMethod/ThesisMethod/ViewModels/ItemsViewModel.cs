@@ -14,13 +14,12 @@ namespace ThesisMethod.ViewModels
     {
         public ObservableRangeCollection<Item> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
-
+        private static string TAG = "------------ItemViewModel.cs ";
         public ItemsViewModel()
         {
             Title = "Browse";
             Items = new ObservableRangeCollection<Item>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
-
             MessagingCenter.Subscribe<NewItemPage, Item>(this, "AddItem", async (obj, item) =>
             {
                 var _item = item as Item;
@@ -28,7 +27,7 @@ namespace ThesisMethod.ViewModels
                 await DataStore.AddItemAsync(_item);
             });
         }
-
+        
         async Task ExecuteLoadItemsCommand()
         {
             if (IsBusy)
