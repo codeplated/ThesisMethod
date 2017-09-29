@@ -23,6 +23,11 @@ namespace ThesisMethod.Views
 
             BindingContext = this;
         }
+        protected override bool OnBackButtonPressed()
+        {
+            logger.InfoNavigational(InfoNavigational.backButtonPressed);
+            return true;
+        }
         protected override void OnAppearing()
         {
             

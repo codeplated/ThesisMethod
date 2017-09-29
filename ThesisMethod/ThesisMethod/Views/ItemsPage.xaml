@@ -5,7 +5,7 @@
              x:Class="ThesisMethod.Views.ItemsPage"
              Title="{Binding Title}"
              x:Name="BrowseItemsPage">
-  <ContentPage.ToolbarItems>
+   <ContentPage.ToolbarItems g:Gesture.Tapped="{Binding CanvasTappedCommand}">
         <ToolbarItem Text="Add Item" Clicked="AddItem_Clicked" />
   </ContentPage.ToolbarItems>
   <ContentPage.Content>

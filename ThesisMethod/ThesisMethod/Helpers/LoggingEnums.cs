@@ -25,8 +25,7 @@ namespace ThesisMethod
     public enum InfoNavigational //Info
     {
         pageName,
-        previousPage,
-        nextPage,
+        backButtonPressed,
         pageTextColor,
         pageBackgroundColor,
         pageMainColor

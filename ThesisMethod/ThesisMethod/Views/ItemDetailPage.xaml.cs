@@ -26,6 +26,11 @@ namespace ThesisMethod.Views
             }
             base.OnAppearing();
         }
+        protected override bool OnBackButtonPressed()
+        {
+            logger.InfoNavigational(InfoNavigational.backButtonPressed);
+            return true;
+        }
         public ItemDetailPage(ItemDetailViewModel viewModel)
         {
             InitializeComponent();

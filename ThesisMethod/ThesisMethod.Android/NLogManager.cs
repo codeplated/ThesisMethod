@@ -27,6 +27,11 @@ namespace ThesisMethod.Droid
 
         public NLogManager()
         {
+            String imei = CrossDevice.Hardware.DeviceId;
+            String screenDimension= CrossDevice.Hardware.ScreenHeight + "*" + CrossDevice.Hardware.ScreenWidth;
+            String brandModel = CrossDevice.Hardware.Manufacturer + "," + CrossDevice.Hardware.Model;
+            String operatingSys = CrossDevice.Hardware.OperatingSystem + "," + CrossDevice.Hardware.OperatingSystemVersion;
+            String appVersion = CrossDevice.App.Version;
             Console.WriteLine(TAG + "constructor");
             var config = new LoggingConfiguration();
 
@@ -40,8 +45,11 @@ namespace ThesisMethod.Droid
             var fileTarget = new FileTarget();
             string folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             fileTarget.Layout = @" ${message} ${longdate} ";
+            string header = @"--------------------------${newline}imei-"+imei+"${newline}screenSize-"+screenDimension+"${newline}brand-"+brandModel+"${ newline}os-"+ operatingSys+"${newline}appVersion-"+ appVersion+ "${newline}starttime-${longdate}${newline}--------------------------${newline}";
+            fileTarget.Header = header;
+            
             //${callsite} ${callsite} ${counter}
-            Console.WriteLine(TAG+" check device id = "+ deviceId);
+
             fileTarget.FileName = Path.Combine(folder, logFileName+deviceId+logFileExt);
             Console.WriteLine(TAG + " check file name = " + fileTarget.FileName);
             //fileTarget.FileName = Path.Combine(InfoDevice.deviceUniqueId.ToString(), @"${longdate}", "-LogFile.txt");
@@ -52,7 +60,16 @@ namespace ThesisMethod.Droid
             LogManager.Configuration = config;
             logger = GetLog();
         }
-
+        public void fileHeader()
+        {
+            Console.WriteLine(TAG + "file header called");
+            logger.InfoDevice(InfoDevice.deviceUniqueId, CrossDevice.Hardware.DeviceId);
+            logger.InfoDevice(InfoDevice.screenDimensions, CrossDevice.Hardware.ScreenHeight + "*" + CrossDevice.Hardware.ScreenWidth);
+            logger.InfoDevice(InfoDevice.manufacturerAndModel, CrossDevice.Hardware.Manufacturer + "," + CrossDevice.Hardware.Model);
+            logger.InfoDevice(InfoDevice.operatingSystemAndVersion, CrossDevice.Hardware.OperatingSystem + "," + CrossDevice.Hardware.OperatingSystemVersion);
+            logger.InfoApp(InfoApp.appVersion, CrossDevice.App.Version);
+            logger.InfoApp(InfoApp.appUniqueId, CrossDevice.Hardware.DeviceId);
+        }
         public ILogger GetLog([System.Runtime.CompilerServices.CallerFilePath] string callerFilePath = "")
         {
             Console.WriteLine(TAG + "getLog called");
@@ -92,16 +109,7 @@ namespace ThesisMethod.Droid
                 logger.InfoFrameworkCrash("deleteLogFile-dirNotFound.Message");
             }
         }
-        public void fileHeader() 
-        {
-            Console.WriteLine(TAG + "file header called");
-            logger.InfoDevice(InfoDevice.deviceUniqueId, CrossDevice.Hardware.DeviceId);
-            logger.InfoDevice(InfoDevice.screenDimensions, CrossDevice.Hardware.ScreenHeight +"*"+ CrossDevice.Hardware.ScreenWidth);
-            logger.InfoDevice(InfoDevice.manufacturerAndModel, CrossDevice.Hardware.Manufacturer + "," + CrossDevice.Hardware.Model);
-            logger.InfoDevice(InfoDevice.operatingSystemAndVersion, CrossDevice.Hardware.OperatingSystem + "," + CrossDevice.Hardware.OperatingSystemVersion);
-            logger.InfoApp(InfoApp.appVersion, CrossDevice.App.Version);
-            logger.InfoApp(InfoApp.appUniqueId, CrossDevice.Hardware.DeviceId);
-        }
+        
         public void checkFileSizeAndUpload()
         {
      
@@ -115,8 +123,7 @@ namespace ThesisMethod.Droid
                 Console.WriteLine(TAG + "file size" + size);
                 Console.WriteLine(TAG + "I should be reading it");
                 if (size > maxFileSize)
-                {
-                    fileHeader();
+                { 
                     HttpUploadFile();
                 }
                 else

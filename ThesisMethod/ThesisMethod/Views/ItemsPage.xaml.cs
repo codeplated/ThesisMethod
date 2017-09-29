@@ -35,7 +35,11 @@ namespace ThesisMethod.Views
         {
             await Navigation.PushAsync(new NewItemPage());
         }
-
+        protected override bool OnBackButtonPressed()
+        {
+            logger.InfoNavigational(InfoNavigational.backButtonPressed);
+            return true;
+        }
         protected override void OnAppearing()
         {
             base.OnAppearing();

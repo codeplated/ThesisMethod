@@ -38,13 +38,13 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Gesture.cs" />
-    <Compile Include="LoggingEnums.cs" />
+    <Compile Include="Helpers\Gesture.cs" />
+    <Compile Include="Helpers\LoggingEnums.cs" />
     <Compile Include="Helpers\MessengingCenterAlert.cs" />
     <Compile Include="Helpers\ObservableObject.cs" />
     <Compile Include="Helpers\ObservableRangeCollection.cs" />
-    <Compile Include="ILogger.cs" />
-    <Compile Include="ILogManager.cs" />
+    <Compile Include="Helpers\ILogger.cs" />
+    <Compile Include="Helpers\ILogManager.cs" />
     <Compile Include="Models\BaseDataObject.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
