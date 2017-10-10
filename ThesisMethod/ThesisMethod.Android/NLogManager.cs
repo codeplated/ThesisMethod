@@ -7,7 +7,6 @@ using NLog.Targets;
 using ThesisMethod.Droid;
 using Xamarin.Forms;
 using System.Net;
-using System.Diagnostics;
 using Plugin.DeviceInfo;
 
 [assembly: Dependency(typeof(NLogManager))]
@@ -20,19 +19,22 @@ namespace ThesisMethod.Droid
     {
         private ILogger logger;
         private static string TAG = "------------NlogManager.cs ";
-        private static string deviceId = CrossDevice.Hardware.DeviceId;
-        private static string logFileName = "SplitLogFileTxt-";
+
+        private static string imei = CrossDevice.Hardware.DeviceId;
+        private static string screenDimension = CrossDevice.Hardware.ScreenHeight + "*" + CrossDevice.Hardware.ScreenWidth;
+        private static string brandModel = CrossDevice.Hardware.Manufacturer + "," + CrossDevice.Hardware.Model;
+        private static string operatingSys = CrossDevice.Hardware.OperatingSystem + "," + CrossDevice.Hardware.OperatingSystemVersion;
+        private static string appVersion = CrossDevice.App.Version;
+
+        private static string logFileName = "SplitLogFileTxt|";
         private static string logFileExt= ".txt";
-        private static long maxFileSize = 5000;
+        private static long maxFileSize = 1000;
+        private static string header;
 
         public NLogManager()
         {
-            String imei = CrossDevice.Hardware.DeviceId;
-            String screenDimension= CrossDevice.Hardware.ScreenHeight + "*" + CrossDevice.Hardware.ScreenWidth;
-            String brandModel = CrossDevice.Hardware.Manufacturer + "," + CrossDevice.Hardware.Model;
-            String operatingSys = CrossDevice.Hardware.OperatingSystem + "," + CrossDevice.Hardware.OperatingSystemVersion;
-            String appVersion = CrossDevice.App.Version;
-            Console.WriteLine(TAG + "constructor");
+            
+      
             var config = new LoggingConfiguration();
 
             var consoleTarget = new ConsoleTarget();
@@ -45,12 +47,12 @@ namespace ThesisMethod.Droid
             var fileTarget = new FileTarget();
             string folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             fileTarget.Layout = @" ${message} ${longdate} ";
-            string header = @"--------------------------${newline}imei-"+imei+"${newline}screenSize-"+screenDimension+"${newline}brand-"+brandModel+"${ newline}os-"+ operatingSys+"${newline}appVersion-"+ appVersion+ "${newline}starttime-${longdate}${newline}--------------------------${newline}";
+            header = @"--------------------------${newline}imei|"+imei+"${newline}screenSize|"+screenDimension+"${newline}brand|"+brandModel+"${newline}os|"+ operatingSys+"${newline}appVersion|"+ appVersion+ "${newline}starttime|${longdate}${newline}--------------------------${newline}";
             fileTarget.Header = header;
             
             //${callsite} ${callsite} ${counter}
 
-            fileTarget.FileName = Path.Combine(folder, logFileName+deviceId+logFileExt);
+            fileTarget.FileName = Path.Combine(folder, logFileName+imei+logFileExt);
             Console.WriteLine(TAG + " check file name = " + fileTarget.FileName);
             //fileTarget.FileName = Path.Combine(InfoDevice.deviceUniqueId.ToString(), @"${longdate}", "-LogFile.txt");
             config.AddTarget("file", fileTarget);
@@ -63,12 +65,14 @@ namespace ThesisMethod.Droid
         public void fileHeader()
         {
             Console.WriteLine(TAG + "file header called");
-            logger.InfoDevice(InfoDevice.deviceUniqueId, CrossDevice.Hardware.DeviceId);
-            logger.InfoDevice(InfoDevice.screenDimensions, CrossDevice.Hardware.ScreenHeight + "*" + CrossDevice.Hardware.ScreenWidth);
-            logger.InfoDevice(InfoDevice.manufacturerAndModel, CrossDevice.Hardware.Manufacturer + "," + CrossDevice.Hardware.Model);
-            logger.InfoDevice(InfoDevice.operatingSystemAndVersion, CrossDevice.Hardware.OperatingSystem + "," + CrossDevice.Hardware.OperatingSystemVersion);
-            logger.InfoApp(InfoApp.appVersion, CrossDevice.App.Version);
-            logger.InfoApp(InfoApp.appUniqueId, CrossDevice.Hardware.DeviceId);
+            logger.WriteHeaders("--------------------------");
+            logger.WriteHeaders("imei|"+imei);
+            logger.WriteHeaders("screenSize|"+screenDimension);
+            logger.WriteHeaders("brand|"+ brandModel);
+            logger.WriteHeaders("os|" + operatingSys);
+            logger.WriteHeaders("appVersion|"+ appVersion); 
+            logger.WriteHeaders("starttime|" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ms"));
+            logger.WriteHeaders("--------------------------");
         }
         public ILogger GetLog([System.Runtime.CompilerServices.CallerFilePath] string callerFilePath = "")
         {
@@ -100,6 +104,7 @@ namespace ThesisMethod.Droid
                     counter++;
                     File.Delete(f);
                 }
+                fileHeader();
                 Console.WriteLine(TAG + "DeleteLogFile" + counter + " Log file(s) deleted successfully!");
                 counter = 0;
             }
@@ -114,7 +119,7 @@ namespace ThesisMethod.Droid
         {
      
             string folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            string file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), logFileName.ToString() + deviceId.ToString() + logFileExt.ToString());
+            string file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), logFileName.ToString() + imei.ToString() + logFileExt.ToString());
             Console.WriteLine(TAG + "checkFileSizeAndUpload Called");
             Console.WriteLine(TAG + "file name = "+ file);
             if (File.Exists(file))
@@ -143,7 +148,7 @@ namespace ThesisMethod.Droid
         {
             Console.WriteLine(TAG + "httpUploadFile called");
             string folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            string file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), logFileName.ToString() + deviceId.ToString() + logFileExt.ToString());
+            string file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), logFileName.ToString() + imei.ToString() + logFileExt.ToString());
             if (File.Exists(file))
             {
                 string url = "http://codeplated.pythonanywhere.com/uploadFile";

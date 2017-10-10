@@ -65,7 +65,6 @@
         TextColor="White">
             <Button.GestureRecognizers>
                 <TapGestureRecognizer 
-                    
                     Command="{Binding CanvasTappedCommand}"/>
             </Button.GestureRecognizers>
         </Button>

@@ -8,14 +8,13 @@ namespace ThesisMethod
 {
     public enum InfoApp //Info
     {
-        appUniqueId,
-        appVersion,
         appForeground,
         appBackground,
         appIntializing
     }
     public enum InfoDevice //Info
     {
+        appVersion,
         deviceUniqueId,
         screenDimensions,
         manufacturerAndModel,

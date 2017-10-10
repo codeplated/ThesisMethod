@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using System;
+using NLog;
 using ThesisMethod.iOS;
 using Xamarin.Forms;
 
@@ -14,34 +15,121 @@ namespace ThesisMethod.iOS
             this.log = log;
         }
 
-        public void Debug(string text, params object[] args)
+        public void InfoApp(Enum e, params object[] args)
         {
-            log.Debug(text, args);
+
+            if (args.Length != 0)
+            {
+                foreach (object arg in args)
+                {
+                    string text = e.ToString() + "|" + arg + "|";
+
+                    log.Info(text);
+                }
+            }
+            else
+            {
+
+                log.Info(e.ToString() + "|");
+            }
+
         }
 
-        public void Error(string text, params object[] args)
+        public void InfoDevice(Enum e, params object[] args)
         {
-            log.Error(text, args);
+            if (args.Length != 0)
+            {
+                foreach (object arg in args)
+                {
+                    string text = e.ToString() + "|" + arg + "|";
+
+                    log.Info(text);
+                }
+            }
+            else
+            {
+
+                log.Info(e.ToString() + "|");
+            }
         }
 
-        public void Fatal(string text, params object[] args)
+        public void InfoNavigational(Enum e, params object[] args)
         {
-            log.Fatal(text, args);
+            if (args.Length != 0)
+            {
+                foreach (object arg in args)
+                {
+                    string text = e.ToString() + "|" + arg + "|";
+
+                    log.Info(text);
+                }
+            }
+            else
+            {
+
+                log.Info(e.ToString() + "|");
+            }
         }
 
-        public void Info(string text, params object[] args)
+        public void InfoTouch(Enum e, params object[] args)
         {
-            log.Info(text, args);
+            if (args.Length != 0)
+            {
+                foreach (object arg in args)
+                {
+                    string text = e.ToString() + "|" + arg + "|";
+
+                    log.Info(text);
+                }
+            }
+            else
+            {
+
+                log.Info(e.ToString() + "|");
+            }
         }
 
-        public void Trace(string text, params object[] args)
+        public void InfoCrash(Enum e, params object[] args)
         {
-            log.Trace(text, args);
+
+            if (args.Length != 0)
+            {
+                foreach (object arg in args)
+                {
+                    string text = e.ToString() + "|" + arg + "|";
+
+                    log.Error(text);
+                }
+            }
+            else
+            {
+
+                log.Info(e.ToString() + "|");
+            }
         }
 
-        public void Warn(string text, params object[] args)
+        public void InfoFrameworkCrash(string message, params object[] args)
         {
-            log.Warn(text, args);
+
+            if (args.Length != 0)
+            {
+                foreach (object arg in args)
+                {
+                    string text = message + "|" + arg + "|";
+
+                    log.Info(text + "|");
+                }
+            }
+            else
+            {
+
+                log.Fatal("InfoFrameworkCrash|" + message + "|");
+            }
+        }
+
+        public void WriteHeaders(string message)
+        {
+            log.Info(message + "|"); ;
         }
     }
 }

@@ -18,6 +18,7 @@ namespace ThesisMethod
         void InfoTouch(Enum e, params object[] args);
         void InfoCrash(Enum e, params object[] args);
         void InfoFrameworkCrash(string message , params object[] args);
+        void WriteHeaders(string message);
 
     }
 }
