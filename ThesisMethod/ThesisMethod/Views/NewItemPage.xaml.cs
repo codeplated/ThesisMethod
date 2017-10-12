@@ -14,6 +14,12 @@ namespace ThesisMethod.Views
         public NewItemPage()
         {
             InitializeComponent();
+            if (!string.IsNullOrEmpty(Title))
+            {
+                logger.InfoNavigational(InfoNavigational.pageTextColor, "#fffff" + "|" + Title);
+                logger.InfoNavigational(InfoNavigational.pageBackgroundColor, "#fffff" + "|" + Title);
+                logger.InfoNavigational(InfoNavigational.pageMainColor, "#2893e6" + "|" + Title);
+            }
 
             Item = new Item
             {

@@ -15,6 +15,16 @@ namespace ThesisMethod.Views
         public ItemDetailPage()
         {
             InitializeComponent();
+            if (!string.IsNullOrEmpty(Title))
+            {
+                logger.InfoNavigational(InfoNavigational.pageTextColor, "#fffff" + "|" + Title);
+                logger.InfoNavigational(InfoNavigational.pageBackgroundColor, "#fffff" + "|" + Title);
+                logger.InfoNavigational(InfoNavigational.pageMainColor, "#2893e6" + "|" + Title);
+            }
+            else {
+                Debug.WriteLine(TAG + "Item detail not avaialble =");
+            }
+
         }
         protected override void OnAppearing()
         {

@@ -11,6 +11,13 @@ namespace ThesisMethod.Views
         public AboutPage()
         {
             InitializeComponent();
+            if (!string.IsNullOrEmpty(Title))
+            {
+                logger.InfoNavigational(InfoNavigational.pageTextColor, "#fffff" + "|" + Title);
+                logger.InfoNavigational(InfoNavigational.pageBackgroundColor, "#fffff" + "|" + Title);
+                logger.InfoNavigational(InfoNavigational.pageMainColor, "#2893e6" + "|" + Title);
+            }
+
         }
         protected override void OnAppearing()
         {
