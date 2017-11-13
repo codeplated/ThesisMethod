@@ -10,20 +10,17 @@ namespace ThesisMethod.Gestures
        
         public static Command<Point> GetCommand(BindableObject view)
         {
-            Debug.WriteLine("Get Command Called");
             
             return (Command<Point>)view.GetValue(TappedProperty);
         }
 
         public static void SetTapped(BindableObject view, Command<Point> value)
         {
-            Debug.WriteLine("SetTapped Called");
             view.SetValue(TappedProperty, value);
         }
 
         private static void CommandChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            Debug.WriteLine("Command changed Called");
             var view = bindable as View;
             if (view != null)
             {
@@ -33,7 +30,6 @@ namespace ThesisMethod.Gestures
 
         private static GestureEffect GetOrCreateEffect(View view)
         {
-            Debug.WriteLine("GetOrCreateEffect Called");
             var effect = (GestureEffect)view.Effects.FirstOrDefault(e => e is GestureEffect);
             if (effect == null)
             {

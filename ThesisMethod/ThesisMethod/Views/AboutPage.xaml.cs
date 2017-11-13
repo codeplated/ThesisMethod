@@ -25,7 +25,7 @@ namespace ThesisMethod.Views
             if (!string.IsNullOrEmpty(Title))
             {
                 logger.InfoNavigational(InfoNavigational.pageName, Title);
-                Debug.WriteLine(TAG + "About page  = " + Title);
+               
             }
             base.OnAppearing();
         }

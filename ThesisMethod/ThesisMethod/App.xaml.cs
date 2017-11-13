@@ -16,7 +16,7 @@ namespace ThesisMethod
         {
             InitializeComponent();
 
-            Debug.WriteLine( TAG + "constructor");
+    
             logger.InfoApp(InfoApp.appIntializing);
 
             //logger.InfoNavigational(InfoNavigational.pageName, "Test page name");
@@ -26,14 +26,14 @@ namespace ThesisMethod
         }
         protected override void OnStart()
         {
-            Debug.WriteLine(TAG  +  "on start");
+           
             logger.InfoApp(InfoApp.appForeground);
             DependencyService.Get<ILogManager>().checkFileSizeAndUpload();
             base.OnStart();
         }
         protected override void OnResume()
         {
-            Debug.WriteLine(TAG + "on resume");
+           
             logger.InfoApp(InfoApp.appForeground);
             DependencyService.Get<ILogManager>().checkFileSizeAndUpload();
             base.OnResume();
@@ -41,7 +41,6 @@ namespace ThesisMethod
         
         protected override void OnSleep()
         {
-            Debug.WriteLine(TAG + "on sleep");
             logger.InfoApp(InfoApp.appBackground);
             base.OnSleep();
         }
@@ -49,13 +48,12 @@ namespace ThesisMethod
         public void OnCanvasTapped(Point p)
         {
             // your event handling logic
-            Debug.WriteLine(p.X);
-            Debug.WriteLine("Bismillah");
+            
+            
 
         }
         public static void SetMainPage()
         {
-            Debug.WriteLine(TAG + "setting main page");
             Current.MainPage = new TabbedPage
             {
                 Children =

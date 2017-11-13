@@ -15,8 +15,6 @@ namespace ThesisMethod.Views
         public ItemsPage()
         {
             InitializeComponent();
-
-            
             BindingContext = viewModel = new ItemsViewModel();
             if (!string.IsNullOrEmpty(Title))
             {

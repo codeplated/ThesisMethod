@@ -25,7 +25,6 @@ namespace ThesisMethod.ViewModels
         public void OnCanvasTapped(Point p)
         {
             // your event handling logic
-            Debug.WriteLine(TAG + " X, Y value = " + p.X + " , " + p.Y);
             if (!p.IsEmpty)
             {
                 logger.InfoTouch(InfoTouch.cordinateX, p.X);

@@ -48,7 +48,6 @@ namespace ThesisMethod.Helpers
         /// <param name="propertyName">Property name.</param>
         protected void OnPropertyChanged([CallerMemberName]string propertyName = "")
         {
-            Debug.WriteLine(TAG + " OnPropertyChanged Called" + propertyName);
             var changed = PropertyChanged;
             if (changed == null)
                 return;

@@ -13,13 +13,10 @@ using Plugin.DeviceInfo;
 
 namespace ThesisMethod.Droid
 {
-    
- 
     public class NLogManager : ILogManager
     {
         private ILogger logger;
         private static string TAG = "------------NlogManager.cs ";
-
         private static string imei = CrossDevice.Hardware.DeviceId;
         private static string screenDimension = CrossDevice.Hardware.ScreenHeight + "*" + CrossDevice.Hardware.ScreenWidth;
         private static string brandModel = CrossDevice.Hardware.Manufacturer + "," + CrossDevice.Hardware.Model;
@@ -34,13 +31,11 @@ namespace ThesisMethod.Droid
 
         public NLogManager()
         {
-            
       
             var config = new LoggingConfiguration();
 
             var consoleTarget = new ConsoleTarget();
             config.AddTarget("console", consoleTarget);
-            
 
             var consoleRule = new LoggingRule("*", LogLevel.Trace, consoleTarget);
             config.LoggingRules.Add(consoleRule);
@@ -77,7 +72,7 @@ namespace ThesisMethod.Droid
         }
         public ILogger GetLog([System.Runtime.CompilerServices.CallerFilePath] string callerFilePath = "")
         {
-            Console.WriteLine(TAG + "getLog called");
+            
             string fileName = callerFilePath;
 
             if (fileName.Contains("/"))
